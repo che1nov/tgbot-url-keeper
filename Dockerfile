@@ -1,5 +1,8 @@
-# Используем официальный образ Go
+# Используем базовый образ с поддержкой cgo
 FROM golang:1.21-alpine
+
+# Устанавливаем зависимости для cgo
+RUN apk add --no-cache gcc musl-dev
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
@@ -10,11 +13,8 @@ COPY . .
 # Скачиваем зависимости
 RUN go mod download
 
-# Установите CGO_ENABLED=1
-ENV CGO_ENABLED=1
-
-# Собираем приложение
-RUN go build -o bot .
+# Собираем приложение с включенным cgo
+RUN CGO_ENABLED=1 go build -o bot .
 
 # Запускаем приложение
 CMD ["./bot"]
