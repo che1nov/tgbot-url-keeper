@@ -19,14 +19,14 @@ func Init() error {
 		return fmt.Errorf("failed to open database: %v", err)
 	}
 
-	// Создание таблицы, если она не существует
 	_, err = db.Exec(`
-		CREATE TABLE IF NOT EXISTS links (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			user_id INTEGER NOT NULL,
-			url TEXT NOT NULL
-		)
-	`)
+	CREATE TABLE IF NOT EXISTS links (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		user_id INTEGER NOT NULL,
+		url TEXT NOT NULL,
+		UNIQUE(user_id, url)
+	)
+`)
 	if err != nil {
 		return fmt.Errorf("failed to create table: %v", err)
 	}
