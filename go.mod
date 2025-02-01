@@ -1,6 +1,6 @@
 module tgbot-url-keeper
 
-go 1.23.5
+go 1.21
 
 require (
 	github.com/mattn/go-sqlite3 v1.14.24
