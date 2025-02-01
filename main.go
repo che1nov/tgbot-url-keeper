@@ -96,7 +96,7 @@ func main() {
 		if isValidURL(text) {
 			if err := storage.SaveLink(userID, text); err != nil {
 				log.Printf("Ошибка при сохранении ссылки: %v", err)
-				return c.Send("❌ Не удалось сохранить ссылку. Попробуй ещё раз позже.")
+				return c.Send("❌ Такая ссылка уже есть.")
 			}
 			return c.Send("✅ Ссылка успешно сохранена в мою тележку: " + text)
 		}
