@@ -3,6 +3,7 @@ package storage
 import (
 	"database/sql"
 	"fmt"
+	"github.com/mattn/go-sqlite3"
 	"log"
 	"strconv"
 
@@ -34,10 +35,17 @@ func Init() error {
 	return nil
 }
 
-// SaveLink сохраняет ссылку в базе данных
 func SaveLink(userID int64, url string) error {
 	_, err := db.Exec("INSERT INTO links (user_id, url) VALUES (?, ?)", userID, url)
-	return err
+	if err != nil {
+		// Можно проверить тип ошибки, если требуется особая обработка
+		// Например, для SQLite текст ошибки может содержать "UNIQUE constraint failed"
+		if sqliteErr, ok := err.(sqlite3.Error); ok && sqliteErr.Code == sqlite3.ErrConstraint {
+			return fmt.Errorf("ссылка уже добавлена")
+		}
+		return err
+	}
+	return nil
 }
 
 // GetLinks возвращает все ссылки пользователя
