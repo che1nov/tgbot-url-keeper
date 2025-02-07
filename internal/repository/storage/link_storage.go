@@ -14,7 +14,7 @@ var db *sql.DB
 // Init инициализирует базу данных
 func Init() error {
 	var err error
-	db, err = sql.Open("sqlite3", "./links.db")
+	db, err = sql.Open("sqlite3", "./internal/repository/links.db")
 	if err != nil {
 		return fmt.Errorf("failed to open database: %v", err)
 	}
