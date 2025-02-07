@@ -14,7 +14,7 @@ COPY . .
 RUN go mod download
 
 # Собираем приложение с включенным cgo
-RUN CGO_ENABLED=1 go build -o bot .
+RUN CGO_ENABLED=1 go build -o bot ./cmd/main.go
 
 # Запускаем приложение
 CMD ["./bot"]
