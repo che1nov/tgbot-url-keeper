@@ -13,7 +13,7 @@ const (
 	StateAwaitingLinkID
 )
 
-var userStates = make(map[int64]int) // userID -> state
+var userStates = make(map[int64]int)
 
 func SetupBot(bot *telebot.Bot) {
 

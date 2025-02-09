@@ -3,10 +3,10 @@ package storage
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/mattn/go-sqlite3" // Импорт драйвера SQLite
 	"log"
 	"strconv"
-
-	_ "github.com/mattn/go-sqlite3" // Импорт драйвера SQLite
+	"tgbot-url-keeper/internal/models"
 )
 
 var db *sql.DB
@@ -52,16 +52,16 @@ func SaveLink(userID int64, url string) error {
 }
 
 // GetLinks возвращает все ссылки пользователя
-func GetLinks(userID int64) ([]Link, error) {
+func GetLinks(userID int64) ([]models.Link, error) {
 	rows, err := db.Query("SELECT id, url FROM links WHERE user_id = ?", userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var links []Link
+	var links []models.Link
 	for rows.Next() {
-		var link Link
+		var link models.Link
 		if err := rows.Scan(&link.ID, &link.URL); err != nil {
 			return nil, err
 		}
@@ -72,10 +72,15 @@ func GetLinks(userID int64) ([]Link, error) {
 }
 
 func DeleteLink(userID int64, linkID string) error {
+	// Попробуем преобразовать linkID в число
 	id, err := strconv.Atoi(linkID)
 	if err != nil {
-		log.Printf("[ERROR] Некорректный ID ссылки: %s (userID=%d)", linkID, userID)
-		return fmt.Errorf("неверный ID ссылки: %v", err)
+		// Если не число, значит передан URL — ищем ID по нему
+		id, err = GetLinkIDByURL(userID, linkID)
+		if err != nil {
+			log.Printf("[ERROR] Некорректный ID или ссылка не найдена: %s (userID=%d)", linkID, userID)
+			return fmt.Errorf("неверный ID ссылки или ссылка не найдена")
+		}
 	}
 
 	log.Printf("[DEBUG] Запрос DELETE: id=%d, userID=%d", id, userID)
@@ -95,9 +100,14 @@ func DeleteLink(userID int64, linkID string) error {
 
 	return nil
 }
-
-// Link представляет структуру ссылки
-type Link struct {
-	ID  int
-	URL string
+func GetLinkIDByURL(userID int64, url string) (int, error) {
+	var id int
+	err := db.QueryRow("SELECT id FROM links WHERE user_id = ? AND url = ?", userID, url).Scan(&id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return 0, fmt.Errorf("ссылка не найдена")
+		}
+		return 0, err
+	}
+	return id, nil
 }
