@@ -3,9 +3,10 @@ package storage
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/mattn/go-sqlite3" // Импорт драйвера SQLite
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"strconv"
+	"strings"
 	"tgbot-url-keeper/internal/models"
 )
 
@@ -72,10 +73,10 @@ func GetLinks(userID int64) ([]models.Link, error) {
 }
 
 func DeleteLink(userID int64, linkID string) error {
-	// Попробуем преобразовать linkID в число
+	// Проверяем, является ли переданный linkID числом
 	id, err := strconv.Atoi(linkID)
 	if err != nil {
-		// Если не число, значит передан URL — ищем ID по нему
+		// Если не число, считаем, что передан URL
 		id, err = GetLinkIDByURL(userID, linkID)
 		if err != nil {
 			log.Printf("[ERROR] Некорректный ID или ссылка не найдена: %s (userID=%d)", linkID, userID)
@@ -100,9 +101,12 @@ func DeleteLink(userID int64, linkID string) error {
 
 	return nil
 }
+
+// GetLinkIDByURL ищет ID ссылки по URL
 func GetLinkIDByURL(userID int64, url string) (int, error) {
+	normalizedURL := normalizeURL(url) // Приводим к единому виду
 	var id int
-	err := db.QueryRow("SELECT id FROM links WHERE user_id = ? AND url = ?", userID, url).Scan(&id)
+	err := db.QueryRow("SELECT id FROM links WHERE user_id = ? AND url = ?", userID, normalizedURL).Scan(&id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return 0, fmt.Errorf("ссылка не найдена")
@@ -110,4 +114,11 @@ func GetLinkIDByURL(userID int64, url string) (int, error) {
 		return 0, err
 	}
 	return id, nil
+}
+
+// normalizeURL убирает http/https для единообразия хранения
+func normalizeURL(url string) string {
+	url = strings.TrimPrefix(url, "http://")
+	url = strings.TrimPrefix(url, "https://")
+	return url
 }
