@@ -4,16 +4,18 @@ import "gopkg.in/telebot.v3"
 
 func SetupBot(bot *telebot.Bot) {
 	menu := &telebot.ReplyMarkup{ResizeKeyboard: true}
-	btnStart := menu.Text("🚀 Старт")
+	btnStart := menu.Text("🚀 Поехали")
 	btnSave := menu.Text("💾 Сохранить ссылку")
 	btnLinks := menu.Text("📂 Мои ссылки")
 	btnDelete := menu.Text("🗑️ Удалить ссылку")
+	btnHelp := menu.Text("❓ Хэлп")
 
 	menu.Reply(
 		menu.Row(btnStart),
 		menu.Row(btnSave),
 		menu.Row(btnLinks),
 		menu.Row(btnDelete),
+		menu.Row(btnHelp),
 	)
 
 	// Подключаем обработчики
@@ -22,5 +24,6 @@ func SetupBot(bot *telebot.Bot) {
 	bot.Handle(&btnSave, handleSaveLink)
 	bot.Handle(&btnLinks, handleGetLinks)
 	bot.Handle(&btnDelete, handleDeleteLink)
+	bot.Handle(&btnHelp, HandleHelp)
 	bot.Handle(telebot.OnText, handleText)
 }
