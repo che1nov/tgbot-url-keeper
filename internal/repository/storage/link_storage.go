@@ -72,6 +72,25 @@ func GetLinks(userID int64) ([]models.Link, error) {
 	return links, nil
 }
 
+func GetFormattedLinks(userID int64) (string, error) {
+	links, err := GetLinks(userID)
+	if err != nil {
+		return "", err
+	}
+
+	if len(links) == 0 {
+		return "У тебя пока нет сохраненных ссылок.", nil
+	}
+
+	var sb strings.Builder
+	sb.WriteString("📂 *Твои сохраненные ссылки:*\n")
+	for i, link := range links {
+		sb.WriteString(fmt.Sprintf("🔗 Ссылка #%d: %s\n", i+1, link.URL))
+	}
+
+	return sb.String(), nil
+}
+
 func DeleteLink(userID int64, linkID string) error {
 	// Проверяем, является ли переданный linkID числом
 	id, err := strconv.Atoi(linkID)

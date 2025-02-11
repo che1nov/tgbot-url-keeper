@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
 	"gopkg.in/telebot.v3"
 	"log"
 	"os"
@@ -10,11 +9,11 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Println("Warning: No .env file found, using system environment variables")
-	} else {
-		log.Println(".env file loaded successfully")
-	}
+	//if err := godotenv.Load(); err != nil {
+	//	log.Println("Warning: No .env file found, using system environment variables")
+	//} else {
+	//	log.Println(".env file loaded successfully")
+	//}
 
 	if err := storage.Init(); err != nil {
 		log.Fatalf("Failed to initialize storage: %v", err)
