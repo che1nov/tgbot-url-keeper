@@ -24,6 +24,6 @@ func SetupBot(bot *telebot.Bot) {
 	bot.Handle(&btnSave, handleSaveLink)
 	bot.Handle(&btnLinks, handleGetLinks)
 	bot.Handle(&btnDelete, handleDeleteLink)
-	bot.Handle(&btnHelp, HandleHelp)
+	bot.Handle(&btnHelp, handleHelp)
 	bot.Handle(telebot.OnText, handleText)
 }
