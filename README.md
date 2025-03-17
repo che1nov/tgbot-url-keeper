@@ -1,33 +1,33 @@
 # Telegram URL Keeper Bot
 
-**Telegram URL Keeper Bot** – это простой Telegram-бот, написанный на языке Go с использованием библиотеки [Telebot v3](https://github.com/tucnak/telebot). Бот позволяет пользователям сохранять, просматривать и удалять ссылки. Он реализует следующие функции:
+**Telegram URL Keeper Bot** is a simple Telegram bot written in Go using the [Telebot v3](https://github.com/tucnak/telebot) library. The bot allows users to save, view, and delete URLs. It implements the following features:
 
-- **Сохранение ссылок:**  
-  Пользователь может отправить ссылку в чат, и бот проверит её корректность. Если ссылка валидна, она сохраняется.
+- **Saving URLs:**  
+  Users can send a URL in the chat, and the bot will check its validity. If the URL is valid, it gets saved.
 
-- **Просмотр сохранённых ссылок:**  
-  При нажатии кнопки «📂 Мои ссылки» бот отправляет список ранее сохранённых ссылок.
+- **Viewing saved URLs:**  
+  By pressing the "📂 My Links" button, the bot sends a list of previously saved URLs.
 
-- **Удаление ссылки:**  
-  При нажатии кнопки «🗑️ Удалить ссылку» бот запрашивает у пользователя ID ссылки для удаления и удаляет выбранную ссылку.
+- **Deleting a URL:**  
+  By pressing the "🗑️ Delete Link" button, the bot asks the user for the ID of the URL to delete and removes the selected URL.
 
-- **Помощь:**  
-  Кнопка «❓ Помощь» выводит инструкцию по использованию бота.
+- **Help:**  
+  The "❓ Help" button displays instructions on how to use the bot.
 
-- **Старт:**  
-  Команда `/start` или нажатие кнопки «🚀 Старт» выводят приветственное сообщение с описанием функциональности бота.
+- **Start:**  
+  The `/start` command or pressing the "🚀 Start" button displays a welcome message with a description of the bot's functionality.
 
-## Структура проекта
+## Project Structure
 
-Проект организован по принципам модульности. Основные компоненты:
+The project is organized according to the principles of modularity. The main components are:
 
 - **package telegram**  
-  Содержит настройку и обработку команд бота, определяет состояния пользователя для различных операций (например, удаление ссылки).
+  Contains the setup and command handling of the bot, defines user states for various operations (e.g., deleting a URL).
 
 - **package storage (internal/repository/storage)**  
-  Реализует операции сохранения, получения и удаления ссылок в хранилище (например, в базе данных или in-memory).
+  Implements operations for saving, retrieving, and deleting URLs in the storage (e.g., in a database or in-memory).
 
-- **Используемые библиотеки:**
-    - [Telebot v3](https://github.com/tucnak/telebot) для взаимодействия с Telegram API.
-    - Стандартный пакет `net/url` для проверки корректности URL.
-    - Пакет `log` для логирования операций.
+- **Used libraries:**
+  - [Telebot v3](https://github.com/tucnak/telebot) for interacting with the Telegram API.
+  - The standard `net/url` package for checking URL validity.
+  - The `log` package for logging operations.

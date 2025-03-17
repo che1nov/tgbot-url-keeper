@@ -18,7 +18,7 @@ func SetupBot(bot *telebot.Bot) {
 		menu.Row(btnHelp),
 	)
 
-	// Подключаем обработчики
+	// Передаем `menu` в обработчик /start
 	bot.Handle("/start", func(c telebot.Context) error { return handleStart(c, menu) })
 	bot.Handle(&btnStart, func(c telebot.Context) error { return handleStart(c, menu) })
 	bot.Handle(&btnSave, handleSaveLink)

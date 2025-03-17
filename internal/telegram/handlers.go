@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/url"
 	"strconv"
-	"sync"
 	"tgbot-url-keeper/internal/repository/storage"
 )
 
@@ -15,10 +14,7 @@ const (
 	StateAwaitingLinkID
 )
 
-var (
-	userStates = make(map[int64]int)
-	mu         sync.Mutex
-)
+var userStates = make(map[int64]int)
 
 // Обработчик команды /start
 func handleStart(c telebot.Context, menu *telebot.ReplyMarkup) error {
@@ -50,8 +46,8 @@ func handleGetLinks(c telebot.Context) error {
 	}
 
 	var message string
-	for _, link := range links {
-		message += fmt.Sprintf("🔗 %d: %s\n", link.ID, link.URL)
+	for i, link := range links { // Используем i + 1 для правильной нумерации
+		message += fmt.Sprintf("🔗 %d: %s\n", i+1, link.URL)
 	}
 
 	return c.Send("📂 *Ваши сохраненные ссылки:*\n" + message)
